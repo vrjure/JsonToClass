@@ -9,13 +9,9 @@ using System.Data;
 
 namespace JsonToClass
 {
-    public abstract class LangConverterBase : ILangConverter
+    internal class LangJsonConverter : LangConverterBase, ILangConverter
     {
-        protected readonly JsonToClassOption option;
-        public LangConverterBase(JsonToClassOption option)
-        {
-            this.option = option;
-        }
+        public LangJsonConverter(ClassOption option) : base(option) { }
 
         private string? currentPropertyName = string.Empty;
         private string? currentObjectPropertyName = string.Empty;
@@ -26,15 +22,7 @@ namespace JsonToClass
         private Stack<ObjectScope> _classStack = new Stack<ObjectScope>();
 
 
-        protected abstract string? IntegerString { get; }
-        protected abstract string? FloatString { get; }
-        protected abstract string? StringString { get; }
-        protected abstract string? BooleanString { get; }
-        protected abstract string? DateTimeString { get; }
-        protected abstract string? ArrayLeftString { get; }
-        protected abstract string? ArrayRightString { get; }
-
-        public string Convert(string json)
+        public override string Convert(string json)
         {
             JsonReaderOptions readOption = new JsonReaderOptions();
             if (option != default)
@@ -49,6 +37,8 @@ namespace JsonToClass
             ObjectScope? oc = default;
 
             var sb = new StringBuilder();
+
+            StartRender(sb);
 
             while (reader.Read())
             {
@@ -172,35 +162,9 @@ namespace JsonToClass
                 lastTokenType = reader.TokenType;
             }
 
+            EndRender(sb);
+
             return sb.ToString();
-        }
-
-        protected abstract void RenderStartObject(StringBuilder? sb, string? className);
-        protected abstract void RenderEndObject(StringBuilder? sb, string? className);
-        protected abstract void RenderComment(StringBuilder? sb, string? content);
-        protected abstract void RenderProperty(StringBuilder? sb, string? propertyName, string? propertyType);
-
-        protected virtual string? FormatPropertyName(string? propertyName)
-        {
-            if (!string.IsNullOrEmpty(propertyName))
-            {
-                switch (option!.PropertyNamePolicy)
-                {
-                    case PropertyNamePolicy.None:
-                        return propertyName;
-                    case PropertyNamePolicy.LowerCameCase:
-                        return $"{propertyName?.Substring(0, 1).ToLower()}{propertyName?.Substring(1, propertyName.Length - 1)}";
-                    case PropertyNamePolicy.CamelCase:
-                        return $"{propertyName?.Substring(0, 1).ToUpper()}{propertyName?.Substring(1, propertyName.Length - 1)}";
-                }
-            }
-            return propertyName;
-        }
-
-        protected virtual void StartRender(StringBuilder? sb) { }
-        protected virtual void EndRender(StringBuilder? sb)
-        {
-            
         }
 
         private void Render(StringBuilder sb, ObjectScope oc)

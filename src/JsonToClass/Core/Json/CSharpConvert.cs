@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace JsonToClass
 {
-    public class CSharpConvert : LangConverterBase
+    internal class CSharpConvert : LangJsonConverter
     {      
-        public CSharpConvert(JsonToClassOption option) : base(option)
+        public CSharpConvert(ClassOption option) : base(option)
         {
 
         }

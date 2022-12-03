@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JsonToClass
 {
-    public class JsonToClassOption
+    public class ClassOption
     {
         public bool CommentInclude { get; set; } = true;
         public PropertyNamePolicy PropertyNamePolicy { get; set; } = PropertyNamePolicy.CamelCase;
@@ -19,5 +19,6 @@ namespace JsonToClass
         public CommentOption? CommentOption { get; set; }
         public ObjectOption? ObjectOPtion { get; set; }
         public ArrayOption? ArrayOption { get; set; }
+        public ICollection<PropertyNameFilter>? Filters { get; set; }
     }
 }

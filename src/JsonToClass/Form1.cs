@@ -8,7 +8,11 @@ namespace JsonToClass
         private static JsonSerializerOptions jsonOption = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters =
+            {
+                new EnumStringConverter()
+            }
         };
 
         private static string configPath = Path.Combine(Directory.GetCurrentDirectory(), "config.json");
@@ -23,8 +27,18 @@ namespace JsonToClass
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var item = (LangConfig)comboBox1.SelectedItem;
-            var converter = new LangConverter(item);
+            var factory = (comboBox_sourceType.SelectedItem as ComboBoxLangItem)?.ConverterFactory;
+            if (factory == null)
+            {
+                return;
+            }
+
+            var item = (LangConfig)comboBox_lang.SelectedItem;
+            if (item == null)
+            {
+                return;
+            }
+            var converter = factory(item);
             textBox_result.Text = converter.Convert(textBox_origin.Text);
         }
 
@@ -38,21 +52,26 @@ namespace JsonToClass
             }
 
             Initialize();
+
             var configs = ReadConfig();
             if (configs == default)
             {
                 return;
             }
 
-            comboBox1.BeginUpdate();
+            comboBox_sourceType.BeginUpdate();
+            comboBox_sourceType.Items.Add(new ComboBoxLangItem() { Text = "Json", ConverterFactory = option => new LangJsonConverter(option) });
+            comboBox_sourceType.Items.Add(new ComboBoxLangItem() { Text = "Line", ConverterFactory = option => new LangLineConverter(option) });
+            comboBox_sourceType.EndUpdate();
+            comboBox_sourceType.SelectedIndex = 0;
 
+            comboBox_lang.BeginUpdate();
             foreach (var item in configs)
             {
-                comboBox1.Items.Add(item);
+                comboBox_lang.Items.Add(item);
             }
-
-            comboBox1.EndUpdate();
-            comboBox1.SelectedIndex = 0;
+            comboBox_lang.EndUpdate();
+            comboBox_lang.SelectedIndex = 0;
         }
 
         private void Initialize()
@@ -87,10 +106,10 @@ namespace JsonToClass
         }
     }
 
-    internal class ComboBoxItem
+    internal class ComboBoxLangItem
     {
         public string? Text { get; set; }
-        public object? Tag { get; set; }
+        public Func<ClassOption, ILangConverter>? ConverterFactory { get; set; }
 
         public override string ToString()
         {

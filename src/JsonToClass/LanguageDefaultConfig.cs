@@ -36,7 +36,11 @@ namespace JsonToClass
                 },
                 PropertyString = "    public {1} {0} {{ get; set; }}",
                 CommentInclude = true,
-                PropertyNamePolicy = PropertyNamePolicy.CamelCase
+                PropertyNamePolicy = PropertyNamePolicy.CamelCase,
+                Filters = new[]
+                {
+                    new PropertyNameFilter{ Filter = "-", Replace = "_" }
+                }
             },
             new LangConfig
             {
@@ -64,7 +68,11 @@ namespace JsonToClass
                 },
                 PropertyString = "    public {1} {0};",
                 CommentInclude = true,
-                PropertyNamePolicy = PropertyNamePolicy.LowerCameCase
+                PropertyNamePolicy = PropertyNamePolicy.LowerCameCase,
+                Filters = new[]
+                {
+                    new PropertyNameFilter{ Filter = "-", Replace = "_" }
+                }
             }
         };
     }

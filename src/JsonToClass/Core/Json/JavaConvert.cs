@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace JsonToClass
 {
-    public class JavaConvert : LangConverterBase
+    internal class JavaConvert : LangJsonConverter
     {
-        public JavaConvert(JsonToClassOption option) : base(option)
+        public JavaConvert(ClassOption option) : base(option)
         {
         }
 

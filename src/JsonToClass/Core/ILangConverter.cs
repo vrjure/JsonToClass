@@ -8,6 +8,6 @@ namespace JsonToClass
 {
     public interface ILangConverter
     {
-        string Convert(string json);
+        string Convert(string content);
     }
 }
