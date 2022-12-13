@@ -20,10 +20,27 @@ namespace JsonToClass
         {
             InitializeComponent();
             this.SuspendLayout();
-            textBox_result.MaxLength = textBox_origin.MaxLength = int.MaxValue;   
+            textBox_result.MaxLength = textBox_origin.MaxLength = int.MaxValue;
+            propertyGrid1.SelectedObject = new LineOption();
+            comboBox_sourceType.SelectedIndexChanged += ComboBox_sourceType_SelectedIndexChanged;
             this.ResumeLayout();
         }
 
+        private void ComboBox_sourceType_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (comboBox_sourceType.SelectedIndex < 0)
+            {
+                return;
+            }
+            var item = comboBox_sourceType.SelectedItem as ComboBoxLangItem;
+            if (item == null)
+            {
+                return;
+            }
+
+            propertyGrid1.Visible = item.Option != null;
+            propertyGrid1.SelectedObject = item.Option;
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -61,7 +78,9 @@ namespace JsonToClass
 
             comboBox_sourceType.BeginUpdate();
             comboBox_sourceType.Items.Add(new ComboBoxLangItem() { Text = "Json", ConverterFactory = option => new LangJsonConverter(option) });
-            comboBox_sourceType.Items.Add(new ComboBoxLangItem() { Text = "Line", ConverterFactory = option => new LangLineConverter(option) });
+            var line = new ComboBoxLangItem() { Text = "Line", Option = new LineOption() };
+            line.ConverterFactory = option => new LangLineConverter(option, (line.Option as LineOption)!);
+            comboBox_sourceType.Items.Add(line);
             comboBox_sourceType.EndUpdate();
             comboBox_sourceType.SelectedIndex = 0;
 
@@ -110,6 +129,7 @@ namespace JsonToClass
     {
         public string? Text { get; set; }
         public Func<ClassOption, ILangConverter>? ConverterFactory { get; set; }
+        public object Option { get; set; }
 
         public override string ToString()
         {
