@@ -41,14 +41,15 @@ namespace JsonToClass
                         continue;
                     }
 
-                    if (AnalysisLine(line, index, out string value))
+                    var result = AnalysisLine(line, index);
+                    if (result.HasValue && result.Value)
                     {
-                        if (!string.IsNullOrEmpty(value))
+                        if (!string.IsNullOrEmpty(line))
                         {
-                            RenderProperty(sb, FormatPropertyName(value), StringString);
+                            RenderProperty(sb, FormatPropertyName(line.Trim()), StringString);
                         }
                     }
-                    else if (!string.IsNullOrEmpty(value))
+                    else if (result.HasValue && !result.Value)
                     {
                         if (_lineOption != null && _lineOption.CommentsRule == LineRule.OddRow)
                         {
@@ -67,13 +68,14 @@ namespace JsonToClass
                                 var cache = new char[len - lastLineIndex];
                                 sb.CopyTo(lastLineIndex, cache, cache.Length);
                                 sb.Remove(lastLineIndex, len - lastLineIndex);
-                                RenderComment(sb, value);
+
+                                RenderComment(sb, CommentHandle(line));
                                 sb.Append(cache);
                             }
                         }
                         else
                         {
-                            RenderComment(sb, value);
+                            RenderComment(sb, CommentHandle(line));
                         }
                         
                     }
@@ -90,35 +92,31 @@ namespace JsonToClass
             return sb.ToString();
         }
 
-        private bool AnalysisLine(string line, int lineIndex, out string value)
+        private bool? AnalysisLine(string line, int lineIndex)
         {
             if (_lineOption == null || _lineOption.ProertyRule == LineRule.EachRow || _lineOption.ProertyRule == LineRule.None)
             {
-                value = line;
                 return true;
             }
 
             if (_lineOption.ProertyRule == LineRule.OddRow || _lineOption.ProertyRule == LineRule.EvenRow)
             {
-                return EvenOddHandle(line, lineIndex, out value);
+                return EvenOddHandle(line, lineIndex);
             }
 
-            value = line;
-            return true;
+            return default;
         }
 
-        private bool EvenOddHandle(string line, int lineIndex, out string value)
+        private bool EvenOddHandle(string line, int lineIndex)
         {
             if (lineIndex % 2 == 0)
             {
                 if (_lineOption.ProertyRule == LineRule.EvenRow)
                 {
-                    value = line.Trim();
                     return true;
                 }
                 else if (_lineOption.CommentsRule == LineRule.EvenRow)
                 {
-                    value = CommentHandle(line);
                     return false;
                 }
             }
@@ -126,28 +124,30 @@ namespace JsonToClass
             {
                 if (_lineOption.ProertyRule == LineRule.OddRow)
                 {
-                    value = line.Trim();
                     return true;
                 }
                 else if (_lineOption.CommentsRule == LineRule.OddRow)
                 {
-                    value = CommentHandle(line);
                     return false;
                 }
             }
 
-            value = string.Empty;
-            return true;
+            return default;
         }
 
         private string CommentHandle(string comments)
         {
-            if (_lineOption == null || string.IsNullOrEmpty(_lineOption.CommentsTrim))
+            if (_lineOption == null)
             {
                 return comments;
             }
 
-            return comments.Trim(_lineOption.CommentsTrim.ToCharArray());
+            if (!string.IsNullOrEmpty(_lineOption.CommentsTrim))
+            {
+                comments = comments.Trim(_lineOption.CommentsTrim.ToCharArray());
+            }
+
+            return comments;
         }
     }
 }
