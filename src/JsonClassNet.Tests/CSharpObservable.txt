@@ -1,0 +1,17 @@
+@name "c# Observable"
+@string "string?"
+@number "int"
+@boolean "bool"
+@dateTime "DateTime"
+@double "double"
+@array "ICollection<$(propertyArrayType)>"
+@null "object"
+@propertyNamePolicy "CamelCase"
+@className "SampleClass"
+@startObject "public class $(className) : ObservableObject
+{"
+@endObject "
+}"
+@property "
+  [ObservableProperty]
+  private $(propertyType) _$(propertyName);"

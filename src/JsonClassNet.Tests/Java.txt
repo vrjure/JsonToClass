@@ -1,0 +1,16 @@
+@name "Java"
+@string "String"
+@number "int"
+@boolean "bool"
+@dateTime "String"
+@double "double"
+@array "ArrayList<$(propertyArrayType)>"
+@null "Object"
+@className "SampleClass"
+@startObject "@Inheritable
+public class $(className)
+{"
+@endObject "
+}"
+@property "
+  public $(propertyType) $(propertyName) {get; set;}"
