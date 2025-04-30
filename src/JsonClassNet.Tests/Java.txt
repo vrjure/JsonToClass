@@ -4,8 +4,9 @@
 @boolean "bool"
 @dateTime "String"
 @double "double"
-@array "ArrayList<$(propertyArrayType)>"
+@array "List<$(propertyArrayType)>"
 @null "Object"
+@propertyNamePolicy "CamelCase"
 @className "SampleClass"
 @startObject "@Inheritable
 public class $(className)
@@ -13,4 +14,4 @@ public class $(className)
 @endObject "
 }"
 @property "
-  public $(propertyType) $(propertyName) {get; set;}"
+  private $(propertyType) $(propertyName);"

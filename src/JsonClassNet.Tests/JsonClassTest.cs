@@ -11,6 +11,7 @@ public class Tests
     private GenerateContext? _csharpObservableTemplate;
     private GenerateContext? _rustTemplate;
     private GenerateContext? _javaTemplate;
+    private GenerateContext? _typescriptTemplate;
     [SetUp]
     public void Setup()
     {
@@ -19,6 +20,7 @@ public class Tests
         _csharpObservableTemplate =new( File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "CSharpObservable.txt")));
         _rustTemplate = new(File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Rust.txt")));
         _javaTemplate = new( File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Java.txt")));
+        _typescriptTemplate = new (File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "TypeScript.txt")));
     }
 
     [Test]
@@ -54,6 +56,12 @@ public class Tests
     public void TestJavaGenerate()
     {
         ClassGenerate((_javaTemplate!));
+    }
+
+    [Test]
+    public void TestTypescriptGenerate()
+    {
+        ClassGenerate(_typescriptTemplate!);
     }
 
     private void ClassGenerate(GenerateContext context)
