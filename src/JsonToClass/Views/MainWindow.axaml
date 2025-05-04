@@ -1,0 +1,204 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:JsonToClass.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:jtc="https://github.com/JsonToClass"
+        xmlns:material="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="JsonToClass.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="JsonToClass"
+        Background="WhiteSmoke"
+        Width="1200"
+        Height="800">
+    <Interaction.Behaviors>
+        <LoadedTrigger>
+            <InvokeCommandAction Command="{Binding ViewLoadedCommand}"></InvokeCommandAction>
+        </LoadedTrigger>
+    </Interaction.Behaviors>
+    
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="TextBlock.Title">
+            <Setter Property="FontSize" Value="20"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="TextWrapping" Value="Wrap"></Setter>
+            <Setter Property="TextAlignment" Value="Center"></Setter>
+        </Style>
+        <Style Selector="Border.EditPanel">
+            <Setter Property="Background" Value="White"></Setter>
+            <Setter Property="CornerRadius" Value="8"></Setter>
+            <Setter Property="Padding" Value="8"></Setter>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="BorderThickness" Value="1"></Setter>
+            <Setter Property="Padding" Value="5"></Setter>
+            <Setter Property="AcceptsReturn" Value="True"></Setter>
+            <Setter Property="CornerRadius" Value="8"></Setter>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"></Setter>
+            <Setter Property="LineHeight" Value="25"></Setter>
+            <Setter Property="SelectionBrush" Value="LightSteelBlue"></Setter>
+        </Style>
+        <Style Selector="Button.ActionButton">
+            <Setter Property="Width" Value="50"></Setter>
+            <Setter Property="Height" Value="50"></Setter>
+            <Setter Property="CornerRadius" Value="25"></Setter>
+            <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="Padding" Value="0"></Setter>
+            <Setter Property="Background" Value="LightSeaGreen"></Setter>
+        </Style>
+        <Style Selector="Button.ActionButton > material|MaterialIcon">
+            <Setter Property="Width" Value="30"></Setter>
+            <Setter Property="Height" Value="30"></Setter>
+        </Style>
+    </Window.Styles>
+    
+    <Border Padding="6"
+            x:Name="RootBorder">
+        <SplitView PanePlacement="Right"
+                   IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}"
+                   PaneBackground="White"
+                   UseLightDismissOverlayMode="True"
+                   OpenPaneLength="398">
+            <SplitView.Pane>
+                <Border Background="White"
+                        Padding="6"
+                        Margin="6,0,0,0"
+                        CornerRadius="8"
+                        BoxShadow="-2 0 8 0 DarkGray">
+                    <Panel>
+                        <TextBox Text="{Binding TemplateContent}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Auto"></TextBox>
+                        <Button HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Classes="ActionButton"
+                                Command="{Binding SaveCommand}"
+                                Margin="12">
+                            <material:MaterialIcon Kind="ContentSave"
+                                                   Width="25"
+                                                   Height="25"></material:MaterialIcon>
+                        </Button>
+                    </Panel>
+                </Border>
+            </SplitView.Pane>
+        
+            <Grid ColumnDefinitions="*,*,Auto">
+                <Border Classes="EditPanel"
+                        Margin="0,0,12,0">
+                    <DockPanel>
+                        <TextBlock Text="Json"
+                                   DockPanel.Dock="Top"
+                                   Classes="Title"></TextBlock>
+                        <TextBox Text="{Binding Json, Mode=OneWayToSource}"></TextBox>
+                    </DockPanel>
+                </Border>
+                
+                <GridSplitter HorizontalAlignment="Right"
+                              Height="80"
+                              CornerRadius="5"></GridSplitter>
+                
+                <Border Grid.Column="1"
+                        Margin="6,0,12,0"
+                        Classes="EditPanel">
+                    <DockPanel>
+                        <TextBlock Text="Class"
+                                   Classes="Title"
+                                   DockPanel.Dock="Top"></TextBlock>
+                        <TextBox Text="{Binding ClassValue}"></TextBox>
+                    </DockPanel>
+                </Border>
+                
+                <Panel Grid.Column="2"
+                       MinWidth="198">
+                    <ListBox ItemsSource="{Binding EditPanels}"
+                             SelectedItem="{Binding SelectedEditPanel, Mode=TwoWay}"
+                             CornerRadius="8"
+                             Padding="6,0"
+                             Background="Transparent">
+                        <ListBox.DataTemplates>
+                            <DataTemplate DataType="{x:Type jtc:TemplateEditPanelModel}">
+                                <Panel>
+                                    <TextBlock HorizontalAlignment="Center"
+                                               Classes="Title"
+                                               Text="{Binding Name}"></TextBlock>
+                                </Panel>
+                            </DataTemplate>
+                        </ListBox.DataTemplates>
+                        <ListBox.ItemContainerTheme>
+                            <ControlTheme TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Setter Property="Padding" Value="6"></Setter>
+                                <Setter Property="CornerRadius" Value="8"></Setter>
+                                <Setter Property="Margin" Value="0,3"></Setter>
+                                <Setter Property="Background" Value="White"></Setter>
+                                <Setter Property="MinHeight" Value="50"></Setter>
+                                <Setter Property="Template">
+                                    <ControlTemplate>
+                                        <Border Padding="{TemplateBinding Padding}"
+                                                CornerRadius="{TemplateBinding CornerRadius}"
+                                                Margin="{TemplateBinding Margin}"
+                                                Background="{TemplateBinding Background}"
+                                                MinHeight="{TemplateBinding MinHeight}"
+                                                x:Name="root">
+                                            <Panel>
+                                                <ContentPresenter Content="{TemplateBinding Content}"></ContentPresenter>
+                                                <Button HorizontalAlignment="Right"
+                                                        Background="Transparent"
+                                                        Padding="6"
+                                                        Foreground="LightSeaGreen"
+                                                        x:Name="EditBtn"
+                                                        IsVisible="False"
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=((jtc:MainWindowViewModel)DataContext).EditCommand}"
+                                                        CommandParameter="{Binding }">
+                                                    <material:MaterialIcon Kind="Edit"
+                                                                           Width="20"
+                                                                           Height="20"></material:MaterialIcon>
+                                                </Button>
+                                            </Panel>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter>
+                                
+                                <Style Selector="^:pointerover /template/ Border#root">
+                                    <Setter Property="Background" Value="LightSteelBlue"></Setter>
+                                </Style>
+                                <Style Selector="^:selected /template/ Border#root">
+                                    <Setter Property="Background" Value="LightSteelBlue"></Setter>
+                                </Style>
+                                <Style Selector="^:pointerover /template/ Button#EditBtn">
+                                    <Setter Property="IsVisible" Value="True"></Setter>
+                                </Style>
+                            </ControlTheme>
+                        </ListBox.ItemContainerTheme>
+                    </ListBox>
+                    
+                    <StackPanel HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom">
+                        <Button Classes="ActionButton"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Margin="6"
+                                Command="{Binding EditCommand}">
+                            <material:MaterialIcon Kind="Add"></material:MaterialIcon>
+                        </Button>
+                        <Button Classes="ActionButton"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Background="OrangeRed"
+                                Margin="6"
+                                Command="{Binding DeleteCommand}">
+                            <material:MaterialIcon Kind="Delete"></material:MaterialIcon>
+                        </Button>
+                    </StackPanel>
+                </Panel>
+            </Grid>
+        </SplitView>
+    </Border>
+</Window>

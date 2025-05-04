@@ -69,7 +69,7 @@ public class Tests
         var ct = new ClassTemplate(context);
 
         var jsonReader = new Utf8JsonReader(Encoding.UTF8.GetBytes(_json!));
-        var writers = ct.Generate(jsonReader);
+        var writers = ct.Generate(ref jsonReader);
         foreach (StringWriter writer in writers)
         {
             Console.WriteLine(writer.GetStringBuilder().ToString());

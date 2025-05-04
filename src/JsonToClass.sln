@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonClassNet", "JsonClassNe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonClassNet.Tests", "JsonClassNet.Tests\JsonClassNet.Tests.csproj", "{6211A3FC-2E40-4B78-BF43-42C46AD04EBA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonToClass", "JsonToClass\JsonToClass.csproj", "{59E75548-B7F0-4E80-BBFE-C1CA7B0D6BA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6211A3FC-2E40-4B78-BF43-42C46AD04EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6211A3FC-2E40-4B78-BF43-42C46AD04EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6211A3FC-2E40-4B78-BF43-42C46AD04EBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59E75548-B7F0-4E80-BBFE-C1CA7B0D6BA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59E75548-B7F0-4E80-BBFE-C1CA7B0D6BA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59E75548-B7F0-4E80-BBFE-C1CA7B0D6BA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59E75548-B7F0-4E80-BBFE-C1CA7B0D6BA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
