@@ -8,11 +8,13 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="JsonToClass.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/JsonToClass.ico"
         Title="JsonToClass"
         Background="WhiteSmoke"
         Width="1200"
-        Height="800">
+        Height="800"
+        MinWidth="600"
+        MinHeight="300">
     <Interaction.Behaviors>
         <LoadedTrigger>
             <InvokeCommandAction Command="{Binding ViewLoadedCommand}"></InvokeCommandAction>

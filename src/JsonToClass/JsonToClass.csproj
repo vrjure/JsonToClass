@@ -1,11 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFrameworks>net8.0;net8.0-macos</TargetFrameworks>
         <Nullable>enable</Nullable>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-macos'">
+        <OutputType>Exe</OutputType>
+        <UseAppHost>true</UseAppHost>
+        <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
     </PropertyGroup>
 
     <ItemGroup>

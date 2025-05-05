@@ -15,11 +15,7 @@ namespace JsonToClass.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private static string _templateFolder = Path.Combine(Environment.CurrentDirectory, "templates");
-    public MainWindowViewModel()
-    {
-        
-    }
+    private static readonly string _templateFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "JsonToClass", "templates");
 
     [ObservableProperty]
     private string? _json;
@@ -110,12 +106,15 @@ public partial class MainWindowViewModel : ViewModelBase
         catch (Exception e)
         {
         }
-        
-        
     }
 
     protected override void ViewLoaded()
     {
+        if (!Directory.Exists(_templateFolder))
+        {
+            Directory.CreateDirectory(_templateFolder);
+        }
+        
         EditPanels ??= new ObservableCollection<TemplateEditPanelModel>();
         var templates = GetTemplates();
         foreach (var template in templates)
