@@ -8,8 +8,7 @@
 @null "any"
 @propertyNamePolicy "CamelCase"
 @className "SampleClass"
-@startObject "
-export interface $(className)
+@startObject "export interface $(className)
 {"
 @endObject "
 }"

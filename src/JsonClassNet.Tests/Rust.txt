@@ -7,8 +7,7 @@
 @array "vec<$(propertyArrayType)>"
 @null "object"
 @className "SampleClass"
-@startObject "
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+@startObject "#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct $(className) {"
 @endObject "
