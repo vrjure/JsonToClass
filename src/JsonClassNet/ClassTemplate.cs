@@ -8,7 +8,7 @@ namespace JsonClassNet;
 
 public ref struct ClassTemplate
 {
-    private GenerateContext _context;
+    private readonly GenerateContext _context;
 
     public ClassTemplate(GenerateContext context)
     {
@@ -200,7 +200,7 @@ public ref struct ClassTemplate
             namePolicy = _context.GetDefineValue(GenerateContext.PropertyNamePolicyDef);
             _context.Parameters[GenerateContext.PropertyNamePolicyDef] = namePolicy;
         }
-
+        
         if (string.IsNullOrEmpty(namePolicy)) return reader.GetString();
         return namePolicy switch
         {
@@ -209,6 +209,7 @@ public ref struct ClassTemplate
             nameof(JsonNamingPolicy.KebabCaseUpper) => JsonNamingPolicy.KebabCaseUpper.ConvertName(reader.GetString()??""),
             nameof(JsonNamingPolicy.SnakeCaseLower) => JsonNamingPolicy.SnakeCaseLower.ConvertName(reader.GetString()??""),
             nameof(JsonNamingPolicy.SnakeCaseUpper) => JsonNamingPolicy.SnakeCaseUpper.ConvertName(reader.GetString()??""),
+            nameof(PropertyNamingPolicy.PascalCase) => PropertyNamingPolicy.PascalCase.ConvertName(reader.GetString()??""),
             _ => reader.GetString()??""
         };
     }
